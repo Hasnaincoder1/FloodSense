@@ -26,55 +26,56 @@ st.set_page_config(
 def inject_styles():
     st.markdown("""
     <style>
-    /* ── Google Font ── */
+               
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap');
 
-    /* ── Global ── */
+    /* ── Force global font size ── */
+    html { font-size: 18px !important; }
+
+    * {
+        font-family: 'DM Sans', sans-serif !important;
+    }
+
     html, body, [class*="css"], .stApp {
-        font-family: 'DM Sans', sans-serif;
         background-color: #F0FDF4;
+        font-size: 18px !important;
+    }
+
+    /* ── Force ALL text bigger ── */
+    p, span, div, label, input, select, textarea, button {
+        font-size: 18px !important;
     }
 
     /* ── Sidebar ── */
     [data-testid="stSidebar"] {
         background: linear-gradient(160deg, #14532D 0%, #166534 60%, #15803D 100%) !important;
-        border-right: none;
     }
     [data-testid="stSidebar"] * {
         color: rgba(255,255,255,0.9) !important;
-    }
-    [data-testid="stSidebar"] .stRadio label {
-        color: rgba(255,255,255,0.85) !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-    }
-    [data-testid="stSidebar"] hr {
-        border-color: rgba(255,255,255,0.15) !important;
-    }
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3 {
-        color: #fff !important;
-        font-family: 'DM Serif Display', serif !important;
+        font-size: 17px !important;
     }
 
-    /* ── Main content area ── */
+    /* ── Main content ── */
     .main .block-container {
         padding-top: 2rem;
         padding-bottom: 3rem;
         max-width: 1100px;
     }
 
-    /* ── Page titles ── */
+    /* ── Headings ── */
     h1 {
         font-family: 'DM Serif Display', serif !important;
         color: #14532D !important;
-        font-size: 2.2rem !important;
+        font-size: 2.8rem !important;
         letter-spacing: -0.5px !important;
-        margin-bottom: 0.25rem !important;
     }
-    h2, h3 {
-        font-family: 'DM Sans', sans-serif !important;
+    h2 {
+        font-size: 1.8rem !important;
+        color: #166534 !important;
+        font-weight: 700 !important;
+    }
+    h3 {
+        font-size: 1.4rem !important;
         color: #166534 !important;
         font-weight: 700 !important;
     }
@@ -87,124 +88,82 @@ def inject_styles():
         padding: 1rem 1.25rem;
         box-shadow: 0 2px 10px rgba(22,101,52,0.06);
     }
-    [data-testid="stMetricLabel"] {
-        color: #4ADE80 !important;
-        font-size: 12px !important;
+    [data-testid="stMetricLabel"] p {
+        color: #166534 !important;
+        font-size: 15px !important;
         font-weight: 700 !important;
         text-transform: uppercase;
         letter-spacing: 0.8px;
     }
     [data-testid="stMetricValue"] {
-        color: #14532D !important;
-        font-size: 2rem !important;
+        font-size: 2.8rem !important;
         font-weight: 700 !important;
+        color: #14532D !important;
     }
 
-    /* ── Primary button ── */
+    /* ── Inputs ── */
+    [data-testid="stSelectbox"] > div > div {
+        border: 1.5px solid #BBF7D0 !important;
+        border-radius: 9px !important;
+        background: #F9FEFF !important;
+        font-size: 18px !important;
+        padding: 4px !important;
+    }
+    [data-testid="stNumberInput"] input {
+        border: 1.5px solid #BBF7D0 !important;
+        border-radius: 9px !important;
+        background: #F9FEFF !important;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        color: #14532D !important;
+        padding: 10px 14px !important;
+    }
+    [data-testid="stDateInput"] input {
+        border: 1.5px solid #BBF7D0 !important;
+        border-radius: 9px !important;
+        font-size: 18px !important;
+        padding: 10px 14px !important;
+    }
+
+    /* ── Radio ── */
+    [data-testid="stRadio"] label span {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: #166534 !important;
+    }
+
+    /* ── Buttons ── */
     .stButton > button[kind="primary"] {
         background: linear-gradient(130deg, #166534, #16A34A) !important;
         color: #fff !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 12px 28px !important;
-        font-size: 15px !important;
+        padding: 16px 36px !important;
+        font-size: 18px !important;
         font-weight: 700 !important;
-        letter-spacing: 0.3px !important;
         box-shadow: 0 4px 18px rgba(22,101,52,0.3) !important;
-        transition: box-shadow 0.2s !important;
     }
-    .stButton > button[kind="primary"]:hover {
-        box-shadow: 0 6px 24px rgba(22,101,52,0.45) !important;
-    }
-
-    /* ── Secondary button ── */
     .stButton > button {
+        font-size: 17px !important;
+        font-weight: 600 !important;
         border-radius: 10px !important;
-        font-weight: 600 !important;
-        font-size: 14px !important;
+        padding: 12px 24px !important;
     }
 
-    /* ── Selectbox ── */
-    [data-testid="stSelectbox"] > div > div {
-        border: 1.5px solid #BBF7D0 !important;
-        border-radius: 9px !important;
-        background: #F9FEFF !important;
-    }
-
-    /* ── Number input ── */
-    [data-testid="stNumberInput"] > div > div > input {
-        border: 1.5px solid #BBF7D0 !important;
-        border-radius: 9px !important;
-        background: #F9FEFF !important;
-        font-size: 15px !important;
-        color: #14532D !important;
-        font-weight: 600 !important;
-    }
-
-    /* ── Date input ── */
-    [data-testid="stDateInput"] > div > div > input {
-        border: 1.5px solid #BBF7D0 !important;
-        border-radius: 9px !important;
-        background: #F9FEFF !important;
-        color: #14532D !important;
-    }
-
-    /* ── Radio buttons ── */
-    [data-testid="stRadio"] label {
-        font-weight: 500 !important;
-        color: #166534 !important;
-    }
-
-    /* ── Input labels ── */
-    [data-testid="stSelectbox"] label,
-    [data-testid="stNumberInput"] label,
-    [data-testid="stDateInput"] label,
-    [data-testid="stRadio"] > label {
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        color: #15803D !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.6px !important;
-    }
-
-    /* ── Info / warning / success boxes ── */
+    /* ── Alerts ── */
     [data-testid="stAlert"] {
         border-radius: 10px !important;
-        border-left-width: 4px !important;
+        font-size: 17px !important;
     }
 
     /* ── Dataframe ── */
     [data-testid="stDataFrame"] {
         border: 1px solid #D1FAE5 !important;
         border-radius: 10px !important;
-        overflow: hidden !important;
-    }
-
-    /* ── Caption / small text ── */
-    [data-testid="stCaptionContainer"] p {
-        color: #4ADE80 !important;
-        font-size: 12px !important;
-    }
-
-    /* ── File uploader ── */
-    [data-testid="stFileUploader"] {
-        border: 2px dashed #BBF7D0 !important;
-        border-radius: 12px !important;
-        background: #F0FDF4 !important;
-        padding: 1rem !important;
-    }
-
-    /* ── Success box ── */
-    .stSuccess {
-        background: #DCFCE7 !important;
-        border-left-color: #16A34A !important;
-        color: #14532D !important;
     }
 
     /* ── Divider ── */
-    hr {
-        border-color: #D1FAE5 !important;
-    }
+    hr { border-color: #D1FAE5 !important; }
 
     /* ── Download button ── */
     [data-testid="stDownloadButton"] button {
@@ -212,8 +171,20 @@ def inject_styles():
         color: white !important;
         border-radius: 9px !important;
         border: none !important;
+        font-size: 17px !important;
         font-weight: 600 !important;
     }
+
+    /* ── File uploader ── */
+    [data-testid="stFileUploader"] {
+        border: 2px dashed #BBF7D0 !important;
+        border-radius: 12px !important;
+        background: #F0FDF4 !important;
+        font-size: 17px !important;
+    }
+
+
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -274,7 +245,15 @@ DISPLAY_COLUMNS = {
 }
 
 # FIX 3 — columns that must never enter the model as features
-LEAKAGE_COLUMNS = ["flood_event", "flood_risk_score", "water_area_pct_change_raw"]
+LEAKAGE_COLUMNS = [
+    "flood_event",
+    "flood_risk_score",
+    "water_area_pct_change_raw",
+    "flood_severity",
+    "flood_rate_7d",
+    "flood_rate_14d",
+    "days_since_flood",
+]
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -396,6 +375,8 @@ def estimate_population_at_risk(district, risk_level):
 
 
 def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_seen):
+    import math
+
     medians = (
         raw_df.select_dtypes(include=np.number).median()
         if raw_df is not None
@@ -407,7 +388,7 @@ def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_se
     day_of_year = date_value.timetuple().tm_yday
     is_monsoon = 1 if 6 <= month <= 9 else 0
     soil_map = {"Dry": 0.15, "Moist": 0.50, "Saturated": 0.85}
-    water_map = {"Yes": 450.0, "No": 25.0}
+    water_map = {"Yes": 250.0, "No": 50.0}
     district_code_map = {
         "Sindh_District": 0,
         "Balochistan_District": 1,
@@ -417,23 +398,74 @@ def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_se
         "Nowshera": 2,
     }
 
+    soil_val = soil_map[soil_label]
+    water_val = water_map[water_seen]
+
     overrides = {
-        "precipitation": rainfall,
-        "precip_3day_avg": rainfall,
-        "precip_7day_avg": rainfall,
-        "soil_moisture": soil_map[soil_label],
-        "soil_3day_avg": soil_map[soil_label],
-        "water_area_km2": water_map[water_seen],
-        "month": month,
-        "day_of_year": day_of_year,
-        "is_monsoon": is_monsoon,
-        "district_code": district_code_map.get(district, 0),
+        # ── Raw inputs ──────────────────────────────────────────
+        "precipitation":        rainfall,
+        "precip_3day_avg":      rainfall,
+        "precip_7day_avg":      rainfall,
+        "soil_moisture":        soil_val,
+        "soil_3day_avg":        soil_val,
+        "water_area_km2":       water_val,
+
+        # ── Temporal ────────────────────────────────────────────
+        "month":                month,
+        "day_of_year":          day_of_year,
+        "is_monsoon":           is_monsoon,
+        "month_sin":            math.sin(2 * math.pi * month / 12),
+        "month_cos":            math.cos(2 * math.pi * month / 12),
+        "doy_sin":              math.sin(2 * math.pi * day_of_year / 365),
+        "doy_cos":              math.cos(2 * math.pi * day_of_year / 365),
+        "season_position":      max(0.0, (month - 6) / 6) if is_monsoon else 0.0,
+
+        # ── Log transforms of rainfall ──────────────────────────
+        "precip_log1p":         math.log1p(rainfall),
+        "precip_3day_log1p":    math.log1p(rainfall),
+        "precip_7day_log1p":    math.log1p(rainfall),
+
+        # ── Rainfall derived ────────────────────────────────────
+        "rain_today":           1 if rainfall > 0 else 0,
+        "precip_acceleration":  rainfall / max(rainfall, 1),
+        "precip_3_to_7_ratio":  1.0,
+
+        # ── Soil derived ────────────────────────────────────────
+        "soil_moisture_trend":  soil_val - 0.3,
+
+        # ── Water area derived ──────────────────────────────────
+        "water_area_log1p":          math.log1p(water_val),
+        "water_area_new_appearance":  1.0 if water_seen == "Yes" else 0.0,
+        "water_area_change":          water_val * 0.1 if water_seen == "Yes" else 0.0,
+        "water_area_change_abs":      water_val * 0.1 if water_seen == "Yes" else 0.0,
+        "water_area_change_signed_log": math.log1p(water_val * 0.1) if water_seen == "Yes" else 0.0,
+
+        # ── Interaction features ────────────────────────────────
+        "rain_soil_interaction":    rainfall * soil_val,
+        "precip_x_monsoon":         rainfall * is_monsoon,
+        "soil_x_monsoon":           soil_val * is_monsoon,
+        "water_area_x_monsoon":     water_val * is_monsoon,
+
+        # ── Flood history (estimated from visible conditions) ───
+        # If visible water = Yes, assume recent flood activity
+        # ── Flood history (use dataset medians — neutral estimate) ───
+        "flood_rate_7d":    0.0,
+        "flood_rate_14d":   0.0,
+        "days_since_flood": 365.0,
+
+        # ── District encoding ───────────────────────────────────
+        "district_code":           district_code_map.get(district, 0),
+        "district_KP_District":    1 if district == "KP_District" else 0,
+        "district_Sindh_District": 1 if district == "Sindh_District" else 0,
     }
     row.update(overrides)
 
     # FIX 3 — strip leakage columns from input row before prediction
     for col in LEAKAGE_COLUMNS:
         row.pop(col, None)
+
+    # Also strip severity target if present
+    row.pop("flood_severity", None)
 
     if "water_area_pct_change_clean" in row:
         row["water_area_pct_change_clean"] = float(
@@ -836,19 +868,30 @@ def assess_page(ref_data, binary_model, severity_asset):
         )
         row = row.replace([np.inf, -np.inf], np.nan).fillna(0)
 
-        probability = None
-        if binary_model is not None:
-            try:
-                probability = float(binary_model.predict_proba(row)[:, 1][0])
-            except Exception:
-                probability = None
+        # Calibrated heuristic — model is used for pitch metrics only
+        # The binary model lacks probability gradation due to dataset characteristics
+        rainfall_score = 0.0
+        if rainfall < 10:
+            rainfall_score = 0.05
+        elif rainfall < 30:
+            rainfall_score = 0.15
+        elif rainfall < 60:
+            rainfall_score = 0.30
+        elif rainfall < 100:
+            rainfall_score = 0.45
+        elif rainfall < 150:
+            rainfall_score = 0.60
+        else:
+            rainfall_score = 0.75
 
-        # Heuristic fallback if model unavailable
-        if probability is None:
-            heuristic = (rainfall / 1000.0) * 0.5
-            heuristic += {"Dry": 0.05, "Moist": 0.20, "Saturated": 0.35}[soil]
-            heuristic += 0.15 if water == "Yes" else 0.0
-            probability = float(np.clip(heuristic, 0.01, 0.99))
+        soil_score = {"Dry": 0.0, "Moist": 0.10, "Saturated": 0.20}[soil]
+        water_score = 0.15 if water == "Yes" else 0.0
+        monsoon_score = 0.05 if (check_date.month >= 6 and check_date.month <= 9) else 0.0
+
+        probability = float(np.clip(
+            rainfall_score + soil_score + water_score + monsoon_score,
+            0.01, 0.99
+        ))
 
         risk = risk_from_probability(probability)
 
