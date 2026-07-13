@@ -1,7 +1,5 @@
 """
 FloodSense Streamlit application.
-Designed for non-technical users and resilient to missing files/inputs.
-All 10 audit fixes applied.
 """
 
 from datetime import date
@@ -150,22 +148,22 @@ def inject_styles():
         padding: 12px 24px !important;
     }
 
-    /* ── Alerts ── */
+    /*  Alerts  */
     [data-testid="stAlert"] {
         border-radius: 10px !important;
         font-size: 17px !important;
     }
 
-    /* ── Dataframe ── */
+    /*  Dataframe  */
     [data-testid="stDataFrame"] {
         border: 1px solid #D1FAE5 !important;
         border-radius: 10px !important;
     }
 
-    /* ── Divider ── */
+    /*  Divider  */
     hr { border-color: #D1FAE5 !important; }
 
-    /* ── Download button ── */
+    /*  Download button */
     [data-testid="stDownloadButton"] button {
         background: #166534 !important;
         color: white !important;
@@ -175,7 +173,7 @@ def inject_styles():
         font-weight: 600 !important;
     }
 
-    /* ── File uploader ── */
+    /* File uploader */
     [data-testid="stFileUploader"] {
         border: 2px dashed #BBF7D0 !important;
         border-radius: 12px !important;
@@ -221,7 +219,7 @@ DISTRICT_POP = {
     "KP_District": 2_000_000,
 }
 
-# FIX 5 — plain English column names for Data tab display
+
 DISPLAY_COLUMNS = {
     "evaporation": "Evaporation (mm)",
     "precipitation": "Rainfall (mm)",
@@ -244,7 +242,6 @@ DISPLAY_COLUMNS = {
     "avg_elevation_m": "Average Elevation (m)",
 }
 
-# FIX 3 — columns that must never enter the model as features
 LEAKAGE_COLUMNS = [
     "flood_event",
     "flood_risk_score",
@@ -256,7 +253,7 @@ LEAKAGE_COLUMNS = [
 ]
 
 
-# ── helpers ──────────────────────────────────────────────────────────────────
+
 
 def _first_existing(paths):
     for path in paths:
@@ -349,7 +346,6 @@ def risk_from_probability(probability):
     return "CRITICAL"
 
 
-# FIX 1 — confidence now reflects certainty of the risk level, not raw flood probability
 def compute_confidence(probability, risk):
     if risk == "LOW":
         # Confident it is LOW = how far from the 0.25 boundary
@@ -367,7 +363,6 @@ def compute_confidence(probability, risk):
         return int(max(50, min(round(raw), 99)))
 
 
-# FIX 4 — label reflects full district population, ratio shown separately
 def estimate_population_at_risk(district, risk_level):
     population = DISTRICT_POP.get(district, 1_000_000)
     impact_ratio = {"LOW": 0.05, "MEDIUM": 0.20, "HIGH": 0.50, "CRITICAL": 0.85}
@@ -402,7 +397,7 @@ def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_se
     water_val = water_map[water_seen]
 
     overrides = {
-        # ── Raw inputs ──────────────────────────────────────────
+        # ── Raw inputs
         "precipitation":        rainfall,
         "precip_3day_avg":      rainfall,
         "precip_7day_avg":      rainfall,
@@ -410,7 +405,7 @@ def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_se
         "soil_3day_avg":        soil_val,
         "water_area_km2":       water_val,
 
-        # ── Temporal ────────────────────────────────────────────
+        # ── Temporal 
         "month":                month,
         "day_of_year":          day_of_year,
         "is_monsoon":           is_monsoon,
@@ -420,40 +415,40 @@ def build_input_row(raw_df, district, date_value, rainfall, soil_label, water_se
         "doy_cos":              math.cos(2 * math.pi * day_of_year / 365),
         "season_position":      max(0.0, (month - 6) / 6) if is_monsoon else 0.0,
 
-        # ── Log transforms of rainfall ──────────────────────────
+        # ── Log transforms of rainfall 
         "precip_log1p":         math.log1p(rainfall),
         "precip_3day_log1p":    math.log1p(rainfall),
         "precip_7day_log1p":    math.log1p(rainfall),
 
-        # ── Rainfall derived ────────────────────────────────────
+        # ── Rainfall derived 
         "rain_today":           1 if rainfall > 0 else 0,
         "precip_acceleration":  rainfall / max(rainfall, 1),
         "precip_3_to_7_ratio":  1.0,
 
-        # ── Soil derived ────────────────────────────────────────
+        # ── Soil derived 
         "soil_moisture_trend":  soil_val - 0.3,
 
-        # ── Water area derived ──────────────────────────────────
+        # ── Water area derived 
         "water_area_log1p":          math.log1p(water_val),
         "water_area_new_appearance":  1.0 if water_seen == "Yes" else 0.0,
         "water_area_change":          water_val * 0.1 if water_seen == "Yes" else 0.0,
         "water_area_change_abs":      water_val * 0.1 if water_seen == "Yes" else 0.0,
         "water_area_change_signed_log": math.log1p(water_val * 0.1) if water_seen == "Yes" else 0.0,
 
-        # ── Interaction features ────────────────────────────────
+        # ── Interaction features 
         "rain_soil_interaction":    rainfall * soil_val,
         "precip_x_monsoon":         rainfall * is_monsoon,
         "soil_x_monsoon":           soil_val * is_monsoon,
         "water_area_x_monsoon":     water_val * is_monsoon,
 
-        # ── Flood history (estimated from visible conditions) ───
+        # ── Flood history (estimated from visible conditions) 
         # If visible water = Yes, assume recent flood activity
-        # ── Flood history (use dataset medians — neutral estimate) ───
+        # ── Flood history (use dataset medians — neutral estimate) 
         "flood_rate_7d":    0.0,
         "flood_rate_14d":   0.0,
         "days_since_flood": 365.0,
 
-        # ── District encoding ───────────────────────────────────
+        # ── District encoding 
         "district_code":           district_code_map.get(district, 0),
         "district_KP_District":    1 if district == "KP_District" else 0,
         "district_Sindh_District": 1 if district == "Sindh_District" else 0,
@@ -655,7 +650,7 @@ def render_probability_gauge(probability, risk_label):
     st.plotly_chart(fig, use_container_width=True)
 
 
-# ── pages ─────────────────────────────────────────────────────────────────────
+# ── pages
 
 def overview_page():
     # Hero banner
@@ -1165,7 +1160,7 @@ def performance_page(ref_data, binary_model, severity_asset):
             )
 
 
-# ── main ──────────────────────────────────────────────────────────────────────
+# ── main 
 
 def main():
     ref_data = load_reference_data()
