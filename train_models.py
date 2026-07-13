@@ -1,13 +1,6 @@
 # train_models.py
 """
-FloodSense — Training Script (Fixed)
-Fixes applied:
-  1. Drops duplicate rows before splitting
-  2. Removes leakage columns (flood_risk_score, water_area_pct_change_raw)
-  3. Replaces inf values before training
-  4. Fills NaN values properly
-  5. Saves full pipeline (scaler + model) so feature names are preserved
-  6. Prints confusion matrix so you can verify the model actually predicts floods
+FloodSense 
 """
 
 import numpy as np
@@ -19,18 +12,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-# ── 1. Load data ──────────────────────────────────────────────────────────────
+# ── 1. Load data
 print("Loading data...")
 features_path = "floodsense_features_engineered.xlsx"
 df = pd.read_excel(features_path)
 print(f"  Loaded: {df.shape[0]} rows, {df.shape[1]} columns")
 
-# ── 2. Drop duplicates ────────────────────────────────────────────────────────
+# ── 2. Drop duplicates
 before = len(df)
 df = df.drop_duplicates()
 print(f"  Dropped {before - len(df)} duplicate rows → {len(df)} remaining")
 
-# ── 3. Remove leakage columns ─────────────────────────────────────────────────
+# ── 3. Remove leakage columns 
 # These columns are derived from or equal to the target — never use as features
 LEAKAGE_COLS = [
     "flood_risk_score",
@@ -44,7 +37,7 @@ BINARY_TARGET = "flood_event"
 SEVERITY_TARGET = "flood_severity"
 SCORE_COL = "flood_risk_score"
 
-# ── 4. Create severity target BEFORE dropping score column ────────────────────
+# ── 4. Create severity target BEFORE dropping score column 
 if SCORE_COL in df.columns:
     df[SEVERITY_TARGET] = pd.cut(
         df[SCORE_COL],
@@ -56,12 +49,12 @@ else:
     print(f"  WARNING: '{SCORE_COL}' not found — severity model will be skipped")
     df[SEVERITY_TARGET] = None
 
-# ── 5. Define feature columns ─────────────────────────────────────────────────
+# ── 5. Define feature columns 
 exclude = set(LEAKAGE_COLS + [BINARY_TARGET, SEVERITY_TARGET])
 feature_cols = [c for c in df.columns if c not in exclude]
 print(f"  Using {len(feature_cols)} features: {feature_cols[:8]} ...")
 
-# ── 6. Clean features ─────────────────────────────────────────────────────────
+# ── 6. Clean features
 X = df[feature_cols].copy()
 
 # Replace inf with NaN then fill with column median
@@ -72,7 +65,7 @@ X = X.fillna(X.median(numeric_only=True))
 X = X.select_dtypes(include=np.number)
 print(f"  Final feature count after numeric filter: {X.shape[1]}")
 
-# ── 7. Binary flood event model ───────────────────────────────────────────────
+# ── 7. Binary flood event model 
 print("\n── Training binary flood event model ──")
 y_bin = df[BINARY_TARGET]
 
@@ -129,7 +122,7 @@ else:
 joblib.dump(binary_pipeline, "flood_event_binary_model.pkl")
 print("  Saved → flood_event_binary_model.pkl")
 
-# ── 8. Severity multi-class model ─────────────────────────────────────────────
+# ── 8. Severity multi-class model 
 print("\n── Training severity classification model ──")
 y_sev = df[SEVERITY_TARGET]
 
